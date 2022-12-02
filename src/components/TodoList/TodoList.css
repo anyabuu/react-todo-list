@@ -1,0 +1,16 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-weight: 400;
+    font-size: 1.3rem;
+    line-height: 1.1;
+    padding: 20px 20px 20px 40px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.item {
+    cursor: pointer;
+    margin-left: 10px;
+}
