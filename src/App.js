@@ -8,7 +8,6 @@ class App extends React.Component {
   state = {
       items: [],
       text: '' ,
-      done: false
   };
 
 
@@ -23,7 +22,8 @@ class App extends React.Component {
         }
         const newItem = {
             text: this.state.text,
-            id: Date.now()
+            id: Date.now(),
+            done: false
         };
         this.setState({
             items: [...this.state.items, newItem],
@@ -31,15 +31,25 @@ class App extends React.Component {
         });
     }
 
-    // onHandleComplete = (e) => {
-    //     console.log(e)
-    //     console.log(this)
-    //     console.log(this.state)
-    //     this.setState({
-    //        done: !this.state.done
-    //     })
-    //     console.log(this.state)
-    // }
+    onHandleComplete = (e, id) => {
+
+        e.currentTarget.classList.toggle('crossed')
+
+        const newStateArr = this.state.items.map((obj)=>{
+            if (obj.id === id){
+                return {...obj, done: !obj.done}
+            }
+
+            return obj
+        })
+
+        this.setState({
+            items: newStateArr,
+        })
+
+
+        console.log(this.state)
+    }
 
 
   render() {
@@ -49,23 +59,8 @@ class App extends React.Component {
                 <h1 className="main-title">
                     My todo list
                 </h1>
-                {/*<ol className="list">*/}
-                {/*    {this.state.items.map(item => (*/}
-                {/*        <li onClick={this.onHandleComplete} className='item' key={item.id}>{item.text}</li>*/}
-                {/*    ))}*/}
-                {/*</ol>*/}
-                <TodoList items = {this.state.items}/>
-                <form className="form" onSubmit={this.onHandleSubmit}>
-                    <input className="form-input"
-                        type = 'text'
-                        onChange = {this.onInputValueChange}
-                        value = {this.state.text}
-                    />
-                    <button className='form-button'>
-                        Add task
-                    </button>
-                </form>
-                {/*<Form text = {this.state.text}/>*/}
+                <TodoList items = {this.state.items} onHandleComplete = {this.onHandleComplete}/>
+                <Form text = {this.state.text} onInputValueChange = {this.onInputValueChange} onHandleSubmit = {this.onHandleSubmit} />
             </div>
         </>
     )

@@ -7,7 +7,7 @@ class TodoList extends React.Component {
         return (
             <ol className="list">
                 {this.props.items.map(item => (
-                    <li onClick={this.onHandleComplete} className='item' key={item.id}>{item.text}</li>
+                    <li onClick={(e) => this.props.onHandleComplete(e, item.id)} className='item' key={item.id}>{item.text}</li>
                 ))}
             </ol>
         );

@@ -1,16 +1,17 @@
 import React from "react";
+import './Form.css';
 
 class Form extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.onHandleSubmit}>
-                <input
+            <form className='form' onSubmit={this.props.onHandleSubmit}>
+                <input className='form-input'
                     type = 'text'
                     value = {this.props.text}
-                    onChange = {this.onInputValueChange}
+                    onChange = {this.props.onInputValueChange}
                 />
-                <button>
+                <button className='form-button'>
                     Add task
                 </button>
             </form>
