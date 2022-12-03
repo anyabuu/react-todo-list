@@ -2,7 +2,6 @@ import React from "react";
 import './Form.css';
 
 class Form extends React.Component {
-
     render() {
         return (
             <form className='form' onSubmit={this.props.onHandleSubmit}>

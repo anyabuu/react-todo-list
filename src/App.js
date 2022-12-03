@@ -10,7 +10,6 @@ class App extends React.Component {
       text: '' ,
   };
 
-
     onInputValueChange = (e) => {
         this.setState({ text: e.target.value });
     }
@@ -32,25 +31,17 @@ class App extends React.Component {
     }
 
     onHandleComplete = (e, id) => {
-
         e.currentTarget.classList.toggle('crossed')
-
         const newStateArr = this.state.items.map((obj)=>{
             if (obj.id === id){
                 return {...obj, done: !obj.done}
             }
-
             return obj
         })
-
         this.setState({
             items: newStateArr,
         })
-
-
-        console.log(this.state)
     }
-
 
   render() {
     return (
@@ -66,6 +57,5 @@ class App extends React.Component {
     )
   }
 }
-
 
 export default App;
