@@ -28,7 +28,6 @@ function App() {
     }
 
     const onHandleComplete = (e, id) => {
-        e.currentTarget.classList.toggle('crossed')
         const newStateArr = items.map((obj)=>{
             if (obj.id === id){
                 return {...obj, done: !obj.done}
