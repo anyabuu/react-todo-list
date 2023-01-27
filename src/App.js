@@ -1,61 +1,54 @@
-import React from "react";
+import React, {useState} from "react";
 import './App.css';
 import TodoList from "./components/TodoList/TodoList";
 import Form from "./components/Form/Form";
 
-class App extends React.Component {
+function App() {
 
-  state = {
-      items: [],
-      text: '' ,
-  };
+    const [items, setItems] = useState([])
+    const [text, setText] = useState('')
 
-    onInputValueChange = (e) => {
-        this.setState({ text: e.target.value });
+    const onInputValueChange = (e) => {
+        setText(e.target.value);
     }
 
-    onHandleSubmit = (e) => {
+    const onHandleSubmit = (e) => {
         e.preventDefault();
-        if (this.state.text.length === 0) {
+        if (text.length === 0) {
             return;
         }
         const newItem = {
-            text: this.state.text,
+            text: text,
             id: Date.now(),
             done: false
         };
-        this.setState({
-            items: [...this.state.items, newItem],
-            text: ''
-        });
+
+        setItems([...items, newItem]);
+        setText('')
     }
 
-    onHandleComplete = (e, id) => {
+    const onHandleComplete = (e, id) => {
         e.currentTarget.classList.toggle('crossed')
-        const newStateArr = this.state.items.map((obj)=>{
+        const newStateArr = items.map((obj)=>{
             if (obj.id === id){
                 return {...obj, done: !obj.done}
             }
             return obj
         })
-        this.setState({
-            items: newStateArr,
-        })
+        setItems(newStateArr)
     }
 
-  render() {
     return (
         <>
             <div className="container">
                 <h1 className="main-title">
                     My todo list
                 </h1>
-                <TodoList items = {this.state.items} onHandleComplete = {this.onHandleComplete}/>
-                <Form text = {this.state.text} onInputValueChange = {this.onInputValueChange} onHandleSubmit = {this.onHandleSubmit} />
+                <TodoList items = {items} onHandleComplete = {onHandleComplete}/>
+                <Form text = {text} onInputValueChange = {onInputValueChange} onHandleSubmit = {onHandleSubmit} />
             </div>
         </>
     )
-  }
 }
 
 export default App;
