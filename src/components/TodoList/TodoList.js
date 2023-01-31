@@ -1,16 +1,15 @@
 import React from "react";
 import './TodoList.css'
+import ListElement from "../ListElement/ListElement";
 
-class TodoList extends React.Component {
-    render() {
+function TodoList ({items, onHandleComplete, onDeleteItem}) {
         return (
             <ol className="list">
-                {this.props.items.map(item => (
-                    <li onClick={(e) => this.props.onHandleComplete(e, item.id)} className='item' key={item.id}>{item.text}</li>
+                {items.map((item) => (
+                    <ListElement key={crypto.randomUUID()} done={item.done} item={item} onHandleComplete={(e) => onHandleComplete(e, item.id)} onDeleteItem={(e) => onDeleteItem(e, item.id)}/>
                 ))}
             </ol>
         );
-    }
 }
 
 export default TodoList;

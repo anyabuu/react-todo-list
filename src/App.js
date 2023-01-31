@@ -1,61 +1,56 @@
-import React from "react";
+import React, {useEffect} from "react";
 import './App.css';
 import TodoList from "./components/TodoList/TodoList";
 import Form from "./components/Form/Form";
+import {useDispatch, useSelector} from "react-redux";
+import {createTodo, deleteTodo, set, toggleTodo} from "./store/actions/todos";
 
-class App extends React.Component {
+function App() {
 
-  state = {
-      items: [],
-      text: '' ,
-  };
+    const dispatch = useDispatch();
+    const {todos, text} = useSelector(state => ({
+        todos: state.todos,
+        text: state.text
+    }));
 
-    onInputValueChange = (e) => {
-        this.setState({ text: e.target.value });
+    useEffect(() => {
+        window.sessionStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
+
+    const onInputValueChange = (e) => {
+        dispatch(set(e.target.value));
     }
 
-    onHandleSubmit = (e) => {
+    const onHandleSubmit = (e) => {
         e.preventDefault();
-        if (this.state.text.length === 0) {
+        if (text.length === 0) {
             return;
         }
-        const newItem = {
-            text: this.state.text,
-            id: Date.now(),
-            done: false
-        };
-        this.setState({
-            items: [...this.state.items, newItem],
-            text: ''
-        });
+
+        dispatch(createTodo(text))
+        dispatch(set(''));
     }
 
-    onHandleComplete = (e, id) => {
-        e.currentTarget.classList.toggle('crossed')
-        const newStateArr = this.state.items.map((obj)=>{
-            if (obj.id === id){
-                return {...obj, done: !obj.done}
-            }
-            return obj
-        })
-        this.setState({
-            items: newStateArr,
-        })
+    const onDeleteItem = (e, id) => {
+        dispatch(deleteTodo(id))
     }
 
-  render() {
+    const onHandleComplete = (e, id) => {
+        dispatch(toggleTodo(id))
+    }
+
     return (
+
         <>
             <div className="container">
                 <h1 className="main-title">
                     My todo list
                 </h1>
-                <TodoList items = {this.state.items} onHandleComplete = {this.onHandleComplete}/>
-                <Form text = {this.state.text} onInputValueChange = {this.onInputValueChange} onHandleSubmit = {this.onHandleSubmit} />
+                <TodoList items = {todos} onDeleteItem={onDeleteItem} onHandleComplete={onHandleComplete}/>
+                <Form text = {text} onInputValueChange = {onInputValueChange} onHandleSubmit={onHandleSubmit} />
             </div>
         </>
     )
-  }
 }
 
 export default App;
