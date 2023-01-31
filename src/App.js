@@ -1,15 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect} from "react";
 import './App.css';
 import TodoList from "./components/TodoList/TodoList";
 import Form from "./components/Form/Form";
+import {useDispatch, useSelector} from "react-redux";
+import {createTodo, deleteTodo, set, toggleTodo} from "./store/actions/todos";
 
 function App() {
 
-    const [items, setItems] = useState([])
-    const [text, setText] = useState('')
+    const dispatch = useDispatch();
+    const {todos, text} = useSelector(state => ({
+        todos: state.todos,
+        text: state.text
+    }));
+
+    useEffect(() => {
+        window.sessionStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
 
     const onInputValueChange = (e) => {
-        setText(e.target.value);
+        dispatch(set(e.target.value));
     }
 
     const onHandleSubmit = (e) => {
@@ -17,34 +26,28 @@ function App() {
         if (text.length === 0) {
             return;
         }
-        const newItem = {
-            text: text,
-            id: Date.now(),
-            done: false
-        };
 
-        setItems([...items, newItem]);
-        setText('')
+        dispatch(createTodo(text))
+        dispatch(set(''));
+    }
+
+    const onDeleteItem = (e, id) => {
+        dispatch(deleteTodo(id))
     }
 
     const onHandleComplete = (e, id) => {
-        const newStateArr = items.map((obj)=>{
-            if (obj.id === id){
-                return {...obj, done: !obj.done}
-            }
-            return obj
-        })
-        setItems(newStateArr)
+        dispatch(toggleTodo(id))
     }
 
     return (
+
         <>
             <div className="container">
                 <h1 className="main-title">
                     My todo list
                 </h1>
-                <TodoList items = {items} onHandleComplete = {onHandleComplete}/>
-                <Form text = {text} onInputValueChange = {onInputValueChange} onHandleSubmit = {onHandleSubmit} />
+                <TodoList items = {todos} onDeleteItem={onDeleteItem} onHandleComplete={onHandleComplete}/>
+                <Form text = {text} onInputValueChange = {onInputValueChange} onHandleSubmit={onHandleSubmit} />
             </div>
         </>
     )
